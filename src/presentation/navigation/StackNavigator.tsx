@@ -3,7 +3,7 @@ import { LoadingScreen } from '../screens/loading/LoadingScreen';
 import { LoginScreen } from '../screens/auth/LoginScreen';
 import { RegisterScreen } from '../screens/auth/RegisterScreen';
 import { HomeScreen } from '../screens/home/HomeScreen';
-import ProductScreen from '../screens/product/ProductScreen';
+import { ProductScreen } from '../screens/product/ProductScreen';
 
 export type RootStackParams = {
     LoadingScreen: undefined;
