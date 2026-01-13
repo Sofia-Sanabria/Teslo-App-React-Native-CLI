@@ -3,18 +3,16 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { RootStackParams } from '../../navigation/StackNavigator';
 import { StackScreenProps } from '@react-navigation/stack';
 import { getProductById } from '../../../actions/products/get-product-by-id';
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native';
 import { ButtonGroup, Button, Input, Layout, useTheme } from '@ui-kitten/components';
-import { FadeInImage } from '../../components/ui/FadeInImage';
-import { Gender, Product, Size } from '../../../domain/entities/product';
+import { Product } from '../../../domain/entities/product';
+import { sizes, genders } from '../../../config/constants/constants';
 import { MyIcon } from '../../components/ui/MyIcon';
 import { Text } from 'react-native';
 import { useRef } from 'react';
 import { Formik } from 'formik';
 import { updateCreateProduct } from '../../../actions/products/update-create-product';
-
-const sizes: Size[] = [Size.Xs, Size.S, Size.M, Size.L, Size.Xl, Size.Xxl]
-const genders: Gender[] = [Gender.Kid, Gender.Men, Gender.Women, Gender.Unisex]
+import { ProductImages } from '../../components/products/ProductImages';
 
 interface Props extends StackScreenProps<RootStackParams, 'ProductScreen'>{}
 
@@ -33,8 +31,8 @@ export const ProductScreen = ({ route }: Props) => {
       onSuccess(data: Product) {
         productIdRef.current = data.id; // creacion 
 
-        queryClient.invalidateQueries({ queryKey: ['products', 'infinite']})
-        queryClient.invalidateQueries({ queryKey: ['product', data.id]})
+        queryClient.invalidateQueries({ queryKey: ['products', 'infinite'] })
+        queryClient.invalidateQueries({ queryKey: ['product', data.id] })
         // queryClient.invalidateQueries(['product', data.id], data);
       },
     })
@@ -54,21 +52,8 @@ export const ProductScreen = ({ route }: Props) => {
               title={ values.title} 
               subTitle={ `Precio: ${ values.price}`}>
               <ScrollView style={{ flex: 1}}>
-                {/* Imagenes del producto */}
-                <Layout>
-                  {/* TODO: Tener en consideracion cuando no hay imagenes */}
-                  <FlatList
-                    data={ values.images }
-                    keyExtractor={ item => item }
-                    horizontal 
-                    showsHorizontalScrollIndicator={ false }
-                    renderItem={ ({ item }) => (
-                      <FadeInImage
-                        uri={ item }
-                        style={{ width: 300, height: 300, marginHorizontal: 7}}
-                      />
-                    )}
-                  />
+                <Layout  style={{ marginVertical: 10, justifyContent: 'center', alignItems: 'center'}}>
+                  <ProductImages images={ values.images } />
                 </Layout>
                 
                 {/* Formulario */}
@@ -174,9 +159,6 @@ export const ProductScreen = ({ route }: Props) => {
                 >
                   Guardar
                 </Button>
-
-                <Text>{ JSON.stringify(values, null, 2) }</Text>
-
                 <Layout style={{height: 200}} />
 
               </ScrollView>
